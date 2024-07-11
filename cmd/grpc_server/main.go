@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -42,6 +44,21 @@ func (s *server) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetRespon
 			CreatedAt: timestamppb.New(gofakeit.Date()),
 			UpdatedAt: timestamppb.New(gofakeit.Date()),
 		},
+	}, nil
+}
+
+func (s *server) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
+
+	md, ok := metadata.FromIncomingContext(ctx)
+
+	if ok {
+		fmt.Println(md)
+	}
+
+	fmt.Println(req.GetInfo())
+
+	return &desc.CreateResponse{
+		Id: 12,
 	}, nil
 }
 
